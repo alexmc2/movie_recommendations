@@ -12,6 +12,6 @@ I've collected the embedded the movie data into the Chroma DB vector database an
 
 Here's an interesting 2D visualisation of the embeddings created by OpenAI's text-embedding-ada-002 model. This graph represents the top 10,000 films on IMDB which have been clustered together based on relatedness between the films.
 
-[https://user-images.githubusercontent.com/119585058/276747742-863f7472-28fe-498b-ba43-cde8429f6f24.png](https://user-images.githubusercontent.com/119585058/276747742-863f7472-28fe-498b-ba43-cde8429f6f24.png)
+![Screenshot1](https://user-images.githubusercontent.com/119585058/276747742-863f7472-28fe-498b-ba43-cde8429f6f24.png)
 
 [https://atlas.nomic.ai/map/503f6783-82d0-4ce8-88a1-a4c3f1c90bc0/748c4f9e-8e10-40d8-858d-e83af1e2bb6b?xs=-28.13648&xf=53.89644&ys=-27.22295&yf=26.12872](https://atlas.nomic.ai/map/503f6783-82d0-4ce8-88a1-a4c3f1c90bc0/748c4f9e-8e10-40d8-858d-e83af1e2bb6b?xs=-28.13648&xf=53.89644&ys=-27.22295&yf=26.12872)
