@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+# this script is used to scrape the plot keywords from IMDB
 
 def get_imdb_keywords(movie_title):
     search_url = f"https://www.imdb.com/find?q={movie_title}"
@@ -44,7 +45,7 @@ def get_imdb_keywords(movie_title):
 
 
 # Read CSV
-df = pd.read_csv("./data/imdb02.csv")
+df = pd.read_csv("./data/imdb03.csv")
 
 # Fetch plot keywords and update dataframe
 keywords_list = []
@@ -59,4 +60,4 @@ for title in df["Title"]:
     time.sleep(2)  # Sleep for 2 seconds
 
 df["Plot Keywords"] = keywords_list
-df.to_csv("./data/updated_movies_with_keywords02.csv", index=False)
+df.to_csv("./data/updated_movies_with_keywords03.csv", index=False)
