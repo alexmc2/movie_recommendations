@@ -9,6 +9,7 @@ from dotenv import dotenv_values
 from nomic import atlas
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 
+
 # Load environment variables
 config = dotenv_values(".env")
 openai.api_key = config["OPENAI_API_KEY"]
