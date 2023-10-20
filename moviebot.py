@@ -16,6 +16,39 @@ collection_name = "movie_embeddings"
 collection = chroma_client.get_or_create_collection(name=collection_name)
 
 
+def insert_movie(movie_data):
+    # Generate an embedding for the movie description
+    movie_embedding = get_embedding(
+        movie_data["Description"], engine="text-embedding-ada-002"
+    )
+
+    # Prepare the document to be inserted
+    document = {"document": movie_data, "embedding": movie_embedding.tolist()}
+
+    # Insert the document into the collection
+    collection.insert(document)
+
+
+# Admin function to insert movies into the database
+def get_movie_input():
+    movie_data = {
+        "Title": input("Enter movie title: "),
+        "Year": input("Enter movie year: "),
+        "Run Time": input("Enter movie runtime (e.g., '120 min'): "),
+        "Rating": input("Enter movie rating (e.g., '8.5/10'): "),
+        "Votes": input("Enter number of votes (e.g., '500,000'): "),
+        "MetaScore": input("Enter movie metascore (e.g., '75/100'): "),
+        "Gross": input("Enter movie gross earnings (e.g., '$500M'): "),
+        "Genre": input("Enter movie genre (e.g., 'Drama, Romance'): "),
+        "Certification": input("Enter movie certification (e.g., 'PG-13'): "),
+        "Director": input("Enter movie director: "),
+        "Stars": input("Enter main stars (e.g., 'Leonardo DiCaprio, Kate Winslet'): "),
+        "Description": input("Enter movie description: "),
+        "Plot Keywords": input("Enter plot keywords (comma-separated): "),
+    }
+    return movie_data
+
+
 def search_movies(query_description, n=3):
     query_embedding = get_embedding(query_description, engine="text-embedding-ada-002")
     results = collection.query(query_embeddings=[query_embedding.tolist()], n_results=n)
@@ -59,6 +92,14 @@ def main():
     while True:
         try:
             user_msg = input("\033[1m\033[34mYou: \033[0m")
+
+            # Check if the user wants to insert a new movie
+            if user_msg.lower() == "insert movie":
+                movie_data = get_movie_input()
+                insert_movie(movie_data)
+                print("\033[1m\033[31mMoviebot: \033[0mMovie inserted successfully!")
+                continue
+
             messages.append({"role": "user", "content": user_msg})
             streamed_responses = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo", messages=messages, stream=True
