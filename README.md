@@ -4,7 +4,7 @@
 
 This repo is the early stages of a movie recommendation app that will use OpenAI's embeddings to calculate relatedness between films and make recommendations based on them
 
-The backend will be built with Python (Flask), and Vite will be used for the frontend. I'll be using Chroma to store the embeddings due to it's easy integration with OpenAi.
+The backend will be built with Python (Flask), and ~~Vite~~ Next.js will be used for the frontend. I'll be using Chroma to store the embeddings due to it's easy integration with OpenAI.
 
 The app will be deployed using AWS.
 
