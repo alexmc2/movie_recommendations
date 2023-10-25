@@ -4,7 +4,7 @@ import chromadb
 import openai
 from dotenv import dotenv_values
 
-from embeddings import get_embedding
+from scripts.embeddings import get_embedding
 
 # Load environment variables
 config = dotenv_values(".env")
