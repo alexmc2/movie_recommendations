@@ -5,13 +5,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+
 # /api/home
-@app.route("/api/home", methods=['GET'])
+@app.route("/api/home", methods=["GET"])
 def return_home():
-    return jsonify({
-        'message': "Test!",
-        
-    })
+    return jsonify(
+        {
+            "message": "Hello World!",
+        }
+    )
 
 
 if __name__ == "__main__":
