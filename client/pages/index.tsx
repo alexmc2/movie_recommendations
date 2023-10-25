@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import ImageCard from '../components/ImageCard';
 
-function index() {
-  const [message, setMessage] = useState('Loading');
+function Index() {
+  const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/home')
+    fetch('http://localhost:8080/api/movies')
       .then((response) => response.json())
       .then((data) => {
-        setMessage(data.message);
+        setMovies(data);
       });
   }, []);
 
   return (
     <div>
-      <div>{message}</div>
+      {movies.map((movie) => (
+        <ImageCard
+          key={movie.title}
+          title={movie.title}
+          imageUrl={movie.imageUrl}
+        />
+      ))}
     </div>
   );
 }
 
-export default index;
+export default Index;

@@ -15,6 +15,17 @@ def return_home():
         }
     )
 
+# /api/movies
+@app.route("/api/movies", methods=["GET"])
+def get_movies():
+    # Fetch movies from the database
+    movies = [
+        # Sample data
+        {"title": "Interstellar", "imageUrl": "https://m.media-amazon.com/images/M/MV5BMjA3NTEwOTMxMV5BMl5BanBnXkFtZTgwMjMyODgxMzE@._V1_.jpg"},
+       
+    ]
+    return jsonify(movies)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
