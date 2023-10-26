@@ -1,7 +1,13 @@
-from flask import Flask, jsonify
+import openai
+from dotenv import dotenv_values
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+from moviebot import insert_movie, search_movies
 
-# app instance
+
+config = dotenv_values(".env")
+openai.api_key = config["OPENAI_API_KEY"]
+
 app = Flask(__name__)
 CORS(app)
 
@@ -20,6 +26,7 @@ def return_home():
 @app.route("/api/movies", methods=["GET"])
 def get_movies():
     # Fetch movies from the database
+    # hardcoded movies for testing
     movies = [
         {
             "title": "Interstellar",
@@ -94,6 +101,31 @@ def get_movies():
     ]
 
     return jsonify(movies)
+
+
+@app.route("/api/moviebot", methods=["POST"])
+def moviebot():
+    user_msg = request.json.get("message")
+
+    # Moviebot logic
+    messages = [{"role": "user", "content": user_msg}]
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+    bot_response = response.choices[0].message["content"]
+
+    # Check for movie recommendations in the bot's response
+    recommended_movies = []
+    if "search_movies:" in bot_response:
+        query = bot_response.split("search_movies:")[-1].strip()
+        recommended_movies = search_movies(query, n=3)
+
+    return jsonify({"response": bot_response, "recommended_movies": recommended_movies})
+
+
+@app.route("/api/insert_movie", methods=["POST"])
+def insert_movie_endpoint():
+    movie_data = request.json
+    insert_movie(movie_data)
+    return jsonify({"message": "Movie inserted successfully!"})
 
 
 if __name__ == "__main__":

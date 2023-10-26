@@ -16,6 +16,7 @@ collection_name = "movie_embeddings"
 collection = chroma_client.get_or_create_collection(name=collection_name)
 
 
+
 def insert_movie(movie_data):
     # Generate an embedding for the movie description
     movie_embedding = get_embedding(

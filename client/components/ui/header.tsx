@@ -13,7 +13,7 @@ export default function Header() {
             <Link
               className="flex items-center space-x-4"
               href="/"
-              aria-label="Cruip"
+              aria-label="Movie App"
             ></Link>
           </div>
 
