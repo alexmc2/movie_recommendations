@@ -8,7 +8,7 @@ The backend will be built with Python (Flask), and ~~Vite~~ Next.js will be used
 
 The app will be deployed using AWS.
 
-I've collected and embedded the movie data (IMDB's top 10,000) into the Chroma vector database and I'm about to start building the backend.
+I've collected and embedded the movie data (IMDB's top 10,000) into the Chroma vector database.
 
 Here's an interesting 2D visualisation of the embeddings created by OpenAI's text-embedding-ada-002 model. This graph represents the top 10,000 films on IMDB which have been clustered together based on relatedness between the films.
 
@@ -18,4 +18,8 @@ Here's an interesting 2D visualisation of the embeddings created by OpenAI's tex
 
 The app will feature a "Moviebot" that uses the embeddings in its film recommendations. It will also include admin functionality to insert new films into the database. 
 
-![Screenshot1](https://user-images.githubusercontent.com/119585058/276906109-1bdb1e3a-eeb9-4545-980f-480eb7c37e5f.png)
+![Screenshot2](https://user-images.githubusercontent.com/119585058/276906109-1bdb1e3a-eeb9-4545-980f-480eb7c37e5f.png)
+
+I am currently designing the UI. The Moviebot chat interface will sit on the left and the image cards will be returned on the right (desktop). This is dummy data but the finished app will return the films from Amazon RDS (SQL database).
+
+![Screenshot3](https://user-images.githubusercontent.com/119585058/278186451-2ea44a36-21bd-4a02-bd04-42ce76390340.png)

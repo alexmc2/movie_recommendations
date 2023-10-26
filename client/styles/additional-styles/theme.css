@@ -1,0 +1,11 @@
+.form-input:focus,
+.form-textarea:focus,
+.form-multiselect:focus,
+.form-select:focus {
+    @apply focus:ring-2 focus:ring-blue-200 dark:focus:ring-0;
+}
+
+.form-checkbox:focus,
+.form-radio:focus {
+    @apply focus:ring-0;
+}
