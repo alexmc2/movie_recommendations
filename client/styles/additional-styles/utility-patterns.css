@@ -31,13 +31,13 @@
   @apply text-sm font-medium inline-flex items-center justify-center border border-transparent rounded-lg transition duration-150 ease-in-out;
 }
 
-.btn {
+/* .btn {
   @apply px-4 py-2;
 }
 
 .btn-sm {
   @apply px-3 py-1.5;
-}
+} */
 
 /* Forms */
 input[type='search']::-webkit-search-decoration,

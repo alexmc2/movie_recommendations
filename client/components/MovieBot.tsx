@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Added useEffect
 import Image from 'next/image';
 import Illustration from '@/public/images/bg-illustration.svg';
 
@@ -9,12 +9,43 @@ interface MovieBotProps {
 export default function MovieBot({ title }: MovieBotProps) {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
+  const [thinkingDots, setThinkingDots] = useState(''); // State for dynamic dots
+
+  useEffect(() => {
+    let interval;
+    if (thinkingDots !== '') {
+      interval = setInterval(() => {
+        setThinkingDots((prevDots) => {
+          switch (prevDots) {
+            case '.':
+              return '..';
+            case '..':
+              return '...';
+            case '.':
+              return '..';
+            case '..':
+              return '...';
+            default:
+              return '.';
+          }
+        });
+      }, 500); // Change dots every 500ms
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [thinkingDots]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
 
     // Immediately display the user's message
-    setMessages([...messages, { role: 'user', content: userInput }]);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { role: 'user', content: userInput },
+    ]);
+
+    setThinkingDots('.'); // Start the "thinking" dots
 
     const response = await fetch('http://localhost:8080/api/moviebot', {
       method: 'POST',
@@ -32,7 +63,11 @@ export default function MovieBot({ title }: MovieBotProps) {
 
     reader.read().then(function processText({ done, value }) {
       if (done) {
-        setMessages([...messages, { role: 'bot', content: botMessage }]);
+        setThinkingDots(''); // End the "thinking" dots
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { role: 'bot', content: botMessage },
+        ]);
         return;
       }
 
@@ -89,6 +124,12 @@ export default function MovieBot({ title }: MovieBotProps) {
             {message.content}
           </div>
         ))}
+        {thinkingDots && (
+          <div className="my-2 p-2 rounded-lg bg-blue-950 text-white">
+            {thinkingDots}
+          </div>
+        )}{' '}
+        {/* Dynamic "thinking" dots */}
       </div>
       <form onSubmit={sendMessage} className="input-box p-4 flex items-center">
         <input
@@ -96,11 +137,11 @@ export default function MovieBot({ title }: MovieBotProps) {
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           placeholder="What kind of movie are you looking for today?"
-          className="flex-grow mr-2 rounded-full py-4 pl-5 pr-12 text-lg bg-slate-700 border-none" // Added border-none
+          className="flex-grow mr-2 rounded-full py-4 pl-5 pr-12 text-lg bg-slate-700 border-none"
         />
         <button
           type="submit"
-          className="btn bg-blue-500 text-white hover:bg-blue-600 rounded-full p-3"
+          className=" bg-blue-500 text-white hover:bg-blue-600 rounded-full p-3"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -118,13 +159,13 @@ export default function MovieBot({ title }: MovieBotProps) {
           </svg>
         </button>
       </form>
-      <div className="flex justify-between p-4 pt-0">
+      <div className="flex justify-between p-4 pt-0 btn">
         <button className="flex-1 btn bg-purple-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg">
           EXAMPLE
         </button>
         <button
           onClick={() => window.location.reload()}
-          className="flex-1 btn bg-green-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg"
+          className="flex-1 btn bg-green-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg "
         >
           RESTART
         </button>
