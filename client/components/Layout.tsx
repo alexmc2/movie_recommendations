@@ -1,6 +1,6 @@
 import Theme from '../pages/theme-provider';
 import Header from '@/components/ui/header';
-import MovieBot from '@/components/movie-bot-page';
+import MovieBot from '@/components/MovieBot';
 
 export const metadata = {
   title: 'Movie App',

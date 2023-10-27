@@ -1,9 +1,10 @@
+import json
+
 import openai
 from dotenv import dotenv_values
-from flask import Flask, jsonify, request
+from flask import Flask, Response, jsonify, request, stream_with_context
 from flask_cors import CORS
-from moviebot import insert_movie, search_movies
-
+from moviebot import insert_movie, moviebot_chat, search_movies
 
 config = dotenv_values(".env")
 openai.api_key = config["OPENAI_API_KEY"]
@@ -106,19 +107,22 @@ def get_movies():
 @app.route("/api/moviebot", methods=["POST"])
 def moviebot():
     user_msg = request.json.get("message")
+    bot_msg = moviebot_chat(user_msg)
 
-    # Moviebot logic
-    messages = [{"role": "user", "content": user_msg}]
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
-    bot_response = response.choices[0].message["content"]
-
-    # Check for movie recommendations in the bot's response
-    recommended_movies = []
-    if "search_movies:" in bot_response:
-        query = bot_response.split("search_movies:")[-1].strip()
+    # Check if the bot wants to search movies using embeddings
+    if "search_movies:" in bot_msg:
+        query = bot_msg.split("search_movies:")[-1].strip()
         recommended_movies = search_movies(query, n=3)
+        bot_msg = "Here are some movie recommendations based on your query:\n"
+        for movie in recommended_movies:
+            bot_msg += f"\nTitle: {movie['title']} ({movie['year']})"
+            bot_msg += f"\nDescription: {movie['description']}\n"
 
-    return jsonify({"response": bot_response, "recommended_movies": recommended_movies})
+    def generate():
+        for word in bot_msg.split():
+            yield json.dumps({"word": word})
+
+    return Response(stream_with_context(generate()), content_type="application/json")
 
 
 @app.route("/api/insert_movie", methods=["POST"])
