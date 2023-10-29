@@ -2,7 +2,7 @@ import json
 
 import openai
 from dotenv import dotenv_values
-from fetch_movies_db import fetch_movie_from_db_by_title
+from fetch_movies_db import fetch_movie_from_db_by_imdb_id
 from flask import Flask, Response, jsonify, request, stream_with_context
 from flask_cors import CORS
 from moviebot import insert_movie, moviebot_chat, search_movies
@@ -107,8 +107,8 @@ def return_home():
 
 @app.route("/api/movies", methods=["GET"])
 def get_movies():
-    # Instead of hardcoded movies, fetch the recommended movies from the movie bot
-    user_msg = "Recommend me some movies"  # You can customize this message
+  
+    user_msg = "Recommend me some movies"  
     bot_msg = moviebot_chat(user_msg)
     print("MovieBot Response:", bot_msg)
     recommended_movie_titles = []
@@ -121,7 +121,7 @@ def get_movies():
             recommended_movie_titles.append(title)
 
     recommended_movies = [
-        fetch_movie_from_db_by_title(title) for title in recommended_movie_titles
+        fetch_movie_from_db_by_imdb_id(title) for title in recommended_movie_titles
     ]
     print("Recommended Movies:", recommended_movies)
     return jsonify(recommended_movies)
@@ -148,7 +148,7 @@ def moviebot():
 
     # Fetch movies from the database using the titles
     recommended_movies = [
-        fetch_movie_from_db_by_title(title) for title in recommended_movie_titles
+        fetch_movie_from_db_by_imdb_id(title) for title in recommended_movie_titles
     ]
 
     return jsonify({"bot_msg": bot_msg, "recommended_movies": recommended_movies})
