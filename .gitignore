@@ -11,3 +11,4 @@ server.htpasswd
 
 # database
 chroma_db
+chroma
