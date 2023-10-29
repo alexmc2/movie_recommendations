@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'; // Added useEffect
 import Image from 'next/image';
 import Illustration from '@/public/images/bg-illustration.svg';
+import { MovieBotProps } from '@/pages/types';
 
-interface MovieBotProps {
-  title: string;
-}
-
-export default function MovieBot({ title }: MovieBotProps) {
+export default function MovieBot({ title, movies }: MovieBotProps) {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const [thinkingDots, setThinkingDots] = useState(''); // State for dynamic dots
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const [displayedMovies, setDisplayedMovies] = useState([]);
 
   useEffect(() => {
     let interval;
@@ -17,10 +16,6 @@ export default function MovieBot({ title }: MovieBotProps) {
       interval = setInterval(() => {
         setThinkingDots((prevDots) => {
           switch (prevDots) {
-            case '.':
-              return '..';
-            case '..':
-              return '...';
             case '.':
               return '..';
             case '..':
@@ -47,52 +42,54 @@ export default function MovieBot({ title }: MovieBotProps) {
 
     setThinkingDots('.'); // Start the "thinking" dots
 
-    const response = await fetch('http://localhost:8080/api/moviebot', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: userInput }),
-    });
+    try {
+      const response = await fetch('http://localhost:8080/api/moviebot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userInput }),
+      });
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-    let buffer = '';
-    let botMessage = '';
+      const data = await response.json();
+      setRecommendedMovies(data.recommended_movies);
 
-    reader.read().then(function processText({ done, value }) {
-      if (done) {
-        setThinkingDots(''); // End the "thinking" dots
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: 'bot', content: botMessage },
-        ]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { role: 'bot', content: data.bot_msg },
+      ]);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    } finally {
+      setThinkingDots(''); // End the "thinking" dots
+    }
+  };
+
+  const fetchRecommendedMovies = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/movies');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const movies = await response.json();
+
+      // Check if movies is an empty object
+      if (!movies || Object.keys(movies).length === 0) {
+        console.error('No movies found in the API response.');
         return;
       }
 
-      buffer += decoder.decode(value, { stream: true });
-
-      let startIdx = buffer.indexOf('{');
-      while (startIdx !== -1) {
-        let endIdx = buffer.indexOf('}', startIdx);
-        if (endIdx === -1) {
-          break;
-        }
-
-        const jsonString = buffer.substring(startIdx, endIdx + 1);
-        const parsedData = JSON.parse(jsonString);
-
-        if (parsedData && parsedData.word) {
-          botMessage += ` ${parsedData.word}`;
-        }
-
-        buffer = buffer.substring(endIdx + 1);
-        startIdx = buffer.indexOf('{');
-      }
-
-      return reader.read().then(processText);
-    });
+      setDisplayedMovies(movies);
+    } catch (error) {
+      console.error(
+        'There was a problem fetching the recommended movies:',
+        error
+      );
+    }
   };
 
   return (
@@ -170,7 +167,10 @@ export default function MovieBot({ title }: MovieBotProps) {
           RESTART
         </button>
 
-        <button className="flex-1 btn bg-blue-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg">
+        <button
+          onClick={fetchRecommendedMovies}
+          className="flex-1 btn bg-blue-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg"
+        >
           SHOW MOVIES!
         </button>
       </div>

@@ -8,7 +8,7 @@ config = dotenv_values(".env")
 openai.api_key = config["OPENAI_API_KEY"]
 
 # Setup Chroma client for local access
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+chroma_client = chromadb.PersistentClient(path="./chroma")
 collection_name = "movie_embeddings"
 collection = chroma_client.get_or_create_collection(name=collection_name)
 
@@ -29,6 +29,7 @@ def search_movies(query_description, n=3):
     results = collection.query(query_embeddings=[query_embedding.tolist()], n_results=n)
     movies = [
         {
+            "id": res["document"]["ID"],
             "title": res["document"]["Title"],
             "year": str(res["document"]["Year"]),
             "runtime": res["document"]["Run Time"],
@@ -42,6 +43,7 @@ def search_movies(query_description, n=3):
             "stars": res["document"]["Stars"],
             "description": res["document"]["Description"],
             "plot_keywords": res["document"]["Plot Keywords"],
+            "imageUrl": res["document"]["Image URL"],
         }
         for res in results
     ]
