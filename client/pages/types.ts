@@ -1,6 +1,9 @@
 // types.ts
 
+import React from 'react';
+
 export interface Movie {
+  ID: string;
   title: string;
   imageUrl: string;
   description: string;
@@ -11,9 +14,12 @@ export interface Movie {
 export interface MovieBotProps {
   title: string;
   movies: Movie[];
+  setDisplayedMovies: React.Dispatch<React.SetStateAction<Movie[]>>;
 }
 
 export interface RootLayoutProps {
   children: React.ReactNode;
   movies: Movie[];
+  displayedMovies: Movie[];
+  setDisplayedMovies: React.Dispatch<React.SetStateAction<Movie[]>>;
 }

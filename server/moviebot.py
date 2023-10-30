@@ -1,3 +1,5 @@
+import re
+
 import chromadb
 import openai
 from dotenv import dotenv_values
@@ -16,7 +18,7 @@ collection = chroma_client.get_or_create_collection(name=collection_name)
 def insert_movie(movie_data):
     # Generate an embedding for the movie description
     movie_embedding = get_embedding(
-        movie_data["Description"], engine="text-embedding-ada-002"
+        movie_data["Description"], model="text-embedding-ada-002"
     )
     # Prepare the document to be inserted
     document = {"document": movie_data, "embedding": movie_embedding.tolist()}
@@ -25,8 +27,12 @@ def insert_movie(movie_data):
 
 
 def search_movies(query_description, n=3):
-    query_embedding = get_embedding(query_description, engine="text-embedding-ada-002")
+    query_embedding = get_embedding(query_description, model="text-embedding-ada-002")
     results = collection.query(query_embeddings=[query_embedding.tolist()], n_results=n)
+
+    movie_titles = [res["document"]["Title"] for res in results]
+    movie_imdb_ids = [res["document"]["ID"] for res in results]
+
     movies = [
         {
             "id": res["document"]["ID"],
@@ -47,7 +53,8 @@ def search_movies(query_description, n=3):
         }
         for res in results
     ]
-    return movies
+
+    return movie_titles, movie_imdb_ids, movies
 
 
 def moviebot_chat(user_msg):
@@ -60,3 +67,8 @@ def moviebot_chat(user_msg):
     messages.append({"role": "user", "content": user_msg})
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
     return response.choices[0].message["content"]
+
+    # Extract IMDb IDs from the bot message
+    # imdb_ids = re.findall(r"tt\d+", bot_msg)
+
+    # return bot_msg, imdb_ids

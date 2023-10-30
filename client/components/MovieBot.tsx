@@ -1,14 +1,20 @@
-import { useState, useEffect } from 'react'; // Added useEffect
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Illustration from '@/public/images/bg-illustration.svg';
 import { MovieBotProps } from '@/pages/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilm } from '@fortawesome/free-solid-svg-icons';
 
-export default function MovieBot({ title, movies }: MovieBotProps) {
+export default function MovieBot({
+  title,
+  movies,
+  setDisplayedMovies,
+}: MovieBotProps) {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
-  const [thinkingDots, setThinkingDots] = useState(''); // State for dynamic dots
+  const [thinkingDots, setThinkingDots] = useState('');
   const [recommendedMovies, setRecommendedMovies] = useState([]);
-  const [displayedMovies, setDisplayedMovies] = useState([]);
+  const [extractedMovieTitles, setExtractedMovieTitles] = useState([]);
 
   useEffect(() => {
     let interval;
@@ -50,6 +56,7 @@ export default function MovieBot({ title, movies }: MovieBotProps) {
         },
         body: JSON.stringify({ message: userInput }),
       });
+      console.log('Raw Response:', response);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -62,6 +69,12 @@ export default function MovieBot({ title, movies }: MovieBotProps) {
         ...prevMessages,
         { role: 'bot', content: data.bot_msg },
       ]);
+
+      setExtractedMovieTitles(data.recommended_movies);
+      console.log(
+        'Recommended IMDb IDs from backend:',
+        data.recommended_movies
+      );
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     } finally {
@@ -71,30 +84,37 @@ export default function MovieBot({ title, movies }: MovieBotProps) {
 
   const fetchRecommendedMovies = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/movies');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const movies = await response.json();
+      // Use IMDb IDs when making the API call
+      console.log('Extracted IMDb IDs:', extractedMovieTitles);
 
-      // Check if movies is an empty object
-      if (!movies || Object.keys(movies).length === 0) {
-        console.error('No movies found in the API response.');
-        return;
-      }
-
-      setDisplayedMovies(movies);
-    } catch (error) {
-      console.error(
-        'There was a problem fetching the recommended movies:',
-        error
+      const response = await fetch(
+        `http://localhost:8080/api/movies?imdb_ids=${extractedMovieTitles.join(
+          '&imdb_ids='
+        )}`
       );
+      const moviesData = await response.json();
+      setDisplayedMovies(moviesData);
+    } catch (error) {
+      console.error('There was a problem fetching recommended movies:', error);
     }
   };
 
   return (
     <div className="relative w-full lg:w-1/2 lg:fixed lg:inset-0 lg:overflow-y-auto no-scrollbar bg-slate-900 flex flex-col justify-between">
       {/* Background Illustration */}
+
+      <div className="text-orange-600 sm:text-6xl text-5xl font-bold pt-20  flex justify-center items-center  px-2 ">
+        <FontAwesomeIcon
+          icon={faFilm}
+          style={{ color: '	#00BFFF', fontSize: '3rem' }}
+          className="mr-4 "
+        />
+        Movie Mine
+      </div>
+      <div className="text-white md:text-lg text-md flex justify-center items-center pt-2 pb-3 px-3 ">
+        Find the perfect film with the help of AI
+      </div>
+
       <div
         className="absolute top-0 -translate-y-64 left-1/2 -translate-x-1/2 blur-3xl pointer-events-none"
         aria-hidden="true"
@@ -128,21 +148,24 @@ export default function MovieBot({ title, movies }: MovieBotProps) {
         )}{' '}
         {/* Dynamic "thinking" dots */}
       </div>
-      <form onSubmit={sendMessage} className="input-box p-4 flex items-center">
+      <form
+        onSubmit={sendMessage}
+        className="input-box p-4 flex items-center relative "
+      >
         <input
           type="text"
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="What kind of movie are you looking for today?"
-          className="flex-grow mr-2 rounded-full py-4 pl-5 pr-12 text-lg bg-slate-700 border-none"
+          placeholder="What kind of movie are you looking for?"
+          className="flex-grow rounded-full sm:py-4 py-2 pl-4 pr-14 sm:pr-10 text-lg bg-slate-700 border-none min-h-[2rem] max-h-[6rem] overflow-y-auto resize-y"
         />
         <button
           type="submit"
-          className=" bg-blue-500 text-white hover:bg-blue-600 rounded-full p-3"
+          className="absolute sm:right-6 right-5 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white hover:bg-blue-600 rounded-full p-2 sm:p-3"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="h-5 w-5 sm:h-6 sm:w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -156,22 +179,24 @@ export default function MovieBot({ title, movies }: MovieBotProps) {
           </svg>
         </button>
       </form>
+
       <div className="flex justify-between p-4 pt-0 btn">
-        <button className="flex-1 btn bg-purple-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg">
+        <button className="flex-1 bg-green-600 text-white hover:bg-gray-700 rounded-md sm:p-3 p-3 mx-1 text-center sm:text-lg text-xs">
           EXAMPLE
         </button>
         <button
           onClick={() => window.location.reload()}
-          className="flex-1 btn bg-green-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg "
+          className="flex-1  bg-orange-600 text-white hover:bg-gray-700 rounded-md sm:p-3 p-3 mx-1 text-center sm:text-lg text-xs"
         >
           RESTART
         </button>
 
         <button
           onClick={fetchRecommendedMovies}
-          className="flex-1 btn bg-blue-600 text-white hover:bg-gray-700 rounded-md p-4 mx-1 text-center text-lg"
+          className="flex-1 bg-blue-600 text-white hover:bg-gray-700 rounded-md sm:p-3 p-3 mx-1 text-center sm:text-lg text-xs"
         >
-          SHOW MOVIES!
+          <span className="hidden md:inline">SHOW MOVIES!</span>
+          <span className="md:hidden">SHOW ME!</span>
         </button>
       </div>
     </div>
