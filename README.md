@@ -43,7 +43,8 @@ The frontend displays this data in the form of image cards.
 
 
 
-![Screenshot3](https://user-images.githubusercontent.com/119585058/279502721-62841024-05f7-4623-a973-d29bede792db.png)
+
+![Screenshot3](https://user-images.githubusercontent.com/119585058/279509607-19bcab58-0477-4956-960f-3e07f92c0351.png)
 
 
 
