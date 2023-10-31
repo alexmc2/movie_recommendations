@@ -20,6 +20,27 @@ The app will feature a "Moviebot" that uses the embeddings in its film recommend
 
 ![Screenshot2](https://user-images.githubusercontent.com/119585058/276906109-1bdb1e3a-eeb9-4545-980f-480eb7c37e5f.png)
 
-I am currently designing the UI. The Moviebot chat interface will sit on the left and the image cards will be returned on the right (desktop). This is dummy data but the finished app will return the films from Amazon RDS (SQL database).
+~~I am currently designing the UI. The Moviebot chat interface will sit on the left and the image cards will be returned on the right (desktop). This is dummy data but the finished app will return the films from Amazon RDS (SQL database).~~
 
 ![Screenshot3](https://user-images.githubusercontent.com/119585058/278186451-2ea44a36-21bd-4a02-bd04-42ce76390340.png)
+
+After a lot of trial and error (so many errors), I've finally managed to get the data flow through the app working as intended:
+
+```
+The user sends a message to the chatbot asking for a film recommendation. 
+
+The chatbot responds with movie recommendations in textual format.
+
+The chatbot uses both the embeddings and Open AI chat functionality in the response. These embeddings are stored in ChromaDB, a vector database. 
+
+The system extracts the unique ID from the response (this is hidden from the user).
+
+Using the extracted ID, the system fetches the film data from an Amazon RDS SQL database where the data is also stored. This process is triggered by the user pressing "Show Movies!"
+
+The frontend displays this data in the form of image cards. 
+```
+
+![Screenshot3](https://user-images.githubusercontent.com/119585058/279502721-62841024-05f7-4623-a973-d29bede792db.png)
+
+
+There are still a lot of refinements and tweaking needed before it can be deployed. The moviebot itself needs some work in terms of how it's using the embedded data in the response, for example, and some design issues still need to be addressed. I'm pleased with how the app is progressing so far, though. :D

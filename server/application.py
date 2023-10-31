@@ -28,6 +28,7 @@ def return_home():
 @app.route("/api/movies", methods=["GET"])
 def get_movies():
     movie_imdb_ids = request.args.getlist("imdb_ids")
+    print("Received IMDb IDs:", movie_imdb_ids)
     movies = [fetch_movie_from_db_by_imdb_id(imdb_id) for imdb_id in movie_imdb_ids]
     return jsonify(movies)
 
@@ -42,12 +43,8 @@ def moviebot():
 
         movie_imdb_ids = [movie["id"] for movie in response["recommended_movies"]]
 
-        detailed_movies = [
-            fetch_movie_from_db_by_imdb_id(imdb_id) for imdb_id in movie_imdb_ids
-        ]
-
         return jsonify(
-            {"bot_msg": response["bot_msg"], "recommended_movies": detailed_movies}
+            {"bot_msg": response["bot_msg"], "recommended_movies": movie_imdb_ids}
         )
 
     except Exception as e:

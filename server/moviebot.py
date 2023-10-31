@@ -62,7 +62,7 @@ def search_movies(query_description, n=3):
     #     }
     #     for res in results
     # ]
-    print("movies")  # Debugging print
+    print("movies")  
 
     return movies, movie_titles, movie_imdb_ids
 
@@ -98,7 +98,7 @@ def moviebot_chat(user_msg):
 
             # Updated to include hidden IMDb ID in the response
             movie_titles = [movie["title"] for movie in movies]
-            bot_msg += f" Based on your request, I suggest you check out: {', '.join(movie_titles)}."
+            bot_msg += f" Based on your request, I also suggest you check out: {', '.join(movie_titles)}."
 
             print(f"Suggested movies: {', '.join(movie_titles)}")
 

@@ -5,15 +5,8 @@ import { useState, useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
   const [movies, setMovies] = useState([]);
-  const [displayedMovies, setDisplayedMovies] = useState([]); // Add this line
+  const [displayedMovies, setDisplayedMovies] = useState([]);
 
-  useEffect(() => {
-    fetch('http://localhost:8080/api/movies')
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies(data);
-      });
-  }, []);
 
   return (
     <RootLayout
@@ -21,7 +14,7 @@ function MyApp({ Component, pageProps }) {
       displayedMovies={displayedMovies}
       setDisplayedMovies={setDisplayedMovies}
     >
-      <Component {...pageProps} />
+      <Component {...pageProps} displayedMovies={displayedMovies} />
     </RootLayout>
   );
 }

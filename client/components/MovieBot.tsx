@@ -182,7 +182,7 @@ export default function MovieBot({
 
       <div className="flex justify-between p-4 pt-0 btn">
         <button className="flex-1 bg-green-600 text-white hover:bg-gray-700 rounded-md sm:p-3 p-3 mx-1 text-center sm:text-lg text-xs">
-          EXAMPLE
+          INSPIRE ME!
         </button>
         <button
           onClick={() => window.location.reload()}

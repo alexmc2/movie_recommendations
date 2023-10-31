@@ -29,6 +29,7 @@ def fetch_movie_from_db_by_imdb_id(imdb_id):
             "description": row[12],
             "imageUrl": row[14],
         }
+        print(f"Movie found in the database: {movie}")
 
         cursor.close()
         conn.close()
