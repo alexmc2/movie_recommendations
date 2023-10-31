@@ -7,7 +7,7 @@ import pandas as pd
 import tiktoken
 from dotenv import dotenv_values
 
-# from nomic import atlas  # comment out atlas code
+from nomic import atlas  
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 # Load environment variables
@@ -115,12 +115,12 @@ if __name__ == "__main__":
         for movie_id in film_embeddings.keys()
     ]
 
-    # Comment out atlas code
-    # project = atlas.map_embeddings(
-    #     embeddings=np.array(embeddings_list), data=data, id_field="ID"
-    # )
+    
+    project = atlas.map_embeddings(
+        embeddings=np.array(embeddings_list), data=data, id_field="ID"
+    )
 
-    # Calculate the cost of embeddings
+    #Calculate the cost of embeddings
     embedding_texts = [extract_embedding_text(movie) for _, movie in movies.iterrows()]
     total_cost = calculate_embedding_cost(embedding_texts)
     print(f"Total cost of embeddings: {total_cost} tokens")

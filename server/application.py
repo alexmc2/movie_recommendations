@@ -34,58 +34,25 @@ def get_movies():
 
 @app.route("/api/moviebot", methods=["POST"])
 def moviebot():
-    user_msg = request.json.get("message")
-    bot_msg = moviebot_chat(user_msg)
+    try:
+        user_msg = request.json.get("message")
+        response = moviebot_chat(user_msg)
 
-    print(f"Chatbot Response: {bot_msg}")  # Print the chatbot's response
+        print(f"Chatbot Response: {response['bot_msg']}")
 
-    # Check if the bot wants to search movies using embeddings
-    if "search_movies:" in bot_msg:
-        query = bot_msg.split("search_movies:")[-1].strip()
-        recommended_movies_from_embeddings = search_movies(query, n=3)
+        movie_imdb_ids = [movie["id"] for movie in response["recommended_movies"]]
 
-        # Extract IMDb IDs from the recommended movies
-        movie_imdb_ids = [movie["ID"] for movie in recommended_movies_from_embeddings]
-
-        # Fetch detailed movie data using IMDb IDs from the Amazon database
-        recommended_movies = [
+        detailed_movies = [
             fetch_movie_from_db_by_imdb_id(imdb_id) for imdb_id in movie_imdb_ids
         ]
 
-        # Construct a bot message with movie titles
-        titles_msg = ", ".join(
-            [movie["title"] for movie in recommended_movies if movie]
+        return jsonify(
+            {"bot_msg": response["bot_msg"], "recommended_movies": detailed_movies}
         )
-        bot_response_msg = f"I recommend the following movies: {titles_msg}"
-    else:
-        # If the bot's response doesn't involve searching movies, use the original bot message
-        bot_response_msg = bot_msg
-        recommended_movies = []
 
-    return jsonify(
-        {"bot_msg": bot_response_msg, "recommended_movies": recommended_movies}
-    )
-
-
-# @app.route("/api/moviebot", methods=["POST"])
-# def moviebot():
-#     user_msg = request.json.get("message")
-#     bot_msg, imdb_ids = moviebot_chat(user_msg)
-
-#     # Fetch detailed movie data using IMDb IDs from the Amazon database
-#     recommended_movies = [
-#         fetch_movie_from_db_by_imdb_id(imdb_id) for imdb_id in imdb_ids
-#     ]
-
-#     # Construct a bot message with movie titles
-#     titles_msg = ", ".join(
-#         [movie["title"] for movie in recommended_movies if movie]
-#     )
-#     bot_response_msg = f"I recommend the following movies: {titles_msg}"
-
-#     return jsonify(
-#         {"bot_msg": bot_response_msg, "recommended_movies": recommended_movies}
-#     )
+    except Exception as e:
+        print("Error in /api/moviebot endpoint:", e)
+        return jsonify({"error": "An error occurred while processing the request."})
 
 
 @app.route("/api/insert_movie", methods=["POST"])
