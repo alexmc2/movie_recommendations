@@ -35,3 +35,14 @@ export default function RootLayout({
     </Theme>
   );
 }
+
+{
+  /* <div className="md:flex w-full flex-grow overflow-hidden">
+  <video className="object-cover w-full h-full" autoPlay muted loop>
+    <source
+      src="https://res.cloudinary.com/drbz4rq7y/video/upload/v1698788486/081779230-4k-flight-international-space-_H264HD1080_zywuyp.mov"
+      type="video/mp4"
+    />
+  </video>
+</div>; */
+}

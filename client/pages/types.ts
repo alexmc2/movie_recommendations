@@ -15,6 +15,7 @@ export interface MovieBotProps {
   title: string;
   movies: Movie[];
   setDisplayedMovies: React.Dispatch<React.SetStateAction<Movie[]>>;
+  // setShowVideo: React.Dispatch<React.SetStateAction<boolean>>; 
 }
 
 export interface RootLayoutProps {
@@ -22,4 +23,5 @@ export interface RootLayoutProps {
   movies: Movie[];
   displayedMovies: Movie[];
   setDisplayedMovies: React.Dispatch<React.SetStateAction<Movie[]>>;
+  // setShowVideo: React.Dispatch<React.SetStateAction<boolean>>;
 }
