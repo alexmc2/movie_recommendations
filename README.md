@@ -47,5 +47,10 @@ The frontend displays this data in the form of image cards.
 ![Screenshot3](https://user-images.githubusercontent.com/119585058/279509607-19bcab58-0477-4956-960f-3e07f92c0351.png)
 
 
+![Screenshot3](https://user-images.githubusercontent.com/119585058/279548280-87504e1b-798c-4fd4-b82c-5630aead831c.png)
+
+
+
+
 
 There are still a lot of refinements and tweaking needed before it can be deployed. The moviebot itself needs some work in terms of how it's using the embedded data in the response, for example, and some design issues still need to be addressed. I'm pleased with how the app is progressing so far, though. :D
