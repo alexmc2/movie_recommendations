@@ -2,15 +2,15 @@
 
 ![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)
 
-This repo is the early stages of a movie recommendation app that will use OpenAI's embeddings to calculate relatedness between films and make recommendations based on them
+This repo is the ~~early~~ middle stages of a movie recommendation app that will use OpenAI's embeddings to calculate relatedness between films and make recommendations based on them.
 
-The backend will be built with Python (Flask), and ~~Vite~~ Next.js will be used for the frontend. I'll be using Chroma to store the embeddings due to it's easy integration with OpenAI.
+I was inspired to make this app while watching a Colt Steel Udemy tutorial on OpenAI text embeddings where a sample of film data was used. I thought it would be a fun and interesting challenge to expand on this idea with a much larger dataset and a frontend user interface. I used scripts to collect the data for the top 10,000 films on IMDB and embedded this into the vector database using OpenAI's text-embedding-ada-002 model. 
 
-The app will be deployed using AWS.
+The backend is built with Python (Flask), and ~~Vite~~ Next.js is used for the frontend. I've used Chroma vector database to store the embeddings due to it's easy integration with OpenAI.
 
-I've collected and embedded the movie data (IMDB's top 10,000) into the Chroma vector database.
+The app will be deployed using AWS. I've also uploaded the film data to Amazon RDS (an SQL database) and this data is used to make image cards on the frontend. 
 
-Here's an interesting 2D visualisation of the embeddings created by OpenAI's text-embedding-ada-002 model. This graph represents the top 10,000 films on IMDB which have been clustered together based on relatedness between the films.
+Here's an interesting 2D visualisation of the embeddings created by the text-embedding-ada-002 model. This graph represents the top 10,000 films on IMDB which have been clustered together based on relatedness between the films.
 
 ![Screenshot1](https://user-images.githubusercontent.com/119585058/276747742-863f7472-28fe-498b-ba43-cde8429f6f24.png)
 
@@ -20,26 +20,26 @@ The app will feature a "Moviebot" that uses the embeddings in its film recommend
 
 ![Screenshot2](https://user-images.githubusercontent.com/119585058/276906109-1bdb1e3a-eeb9-4545-980f-480eb7c37e5f.png)
 
-~~I am currently designing the UI. The Moviebot chat interface will sit on the left and the image cards will be returned on the right (desktop). This is dummy data but the finished app will return the films from Amazon RDS (SQL database).~~
+~~I am currently designing the UI. The Moviebot chat interface will sit on the left and the image cards will be returned on the right (desktop). This is dummy data but the finished app will return the films from Amazon RDS.~~
 
 
 ![Screenshot3](https://user-images.githubusercontent.com/119585058/278186451-2ea44a36-21bd-4a02-bd04-42ce76390340.png)
 
 
-After a lot of trial and error (so many errors), I've finally managed to get the data flow through the app working as intended:
+After a lot of trial and error (many, many errors), I've finally managed to get the data flow through the app working as intended:
 
 
-The user sends a message to the chatbot asking for a film recommendation. 
+-The user sends a message to the chatbot asking for a film recommendation. 
 
-The chatbot responds with movie recommendations in textual format.
+-The chatbot responds with movie recommendations in textual format.
 
-The chatbot uses both the embeddings and Open AI chat functionality in the response. These embeddings are stored in ChromaDB, a vector database. 
+-The chatbot uses both the embeddings and Open AI chat functionality in the response. These embeddings are stored in ChromaDB, a vector database. 
 
-The system extracts the unique ID from the response (this is hidden from the user).
+-The system extracts the unique ID from the response (this is hidden from the user).
 
-Using the extracted ID, the system fetches the film data from an Amazon RDS SQL database where the data is also stored. This process is triggered by the user pressing "Show Movies!"
+-Using the extracted ID, the system fetches the film data from an Amazon RDS SQL database where the data is also stored. This process is triggered by the user pressing "Show     Movies!"
 
-The frontend displays this data in the form of image cards. 
+-The frontend displays this data in the form of image cards. 
 
 
 
@@ -53,4 +53,4 @@ The frontend displays this data in the form of image cards.
 
 
 
-There are still a lot of refinements and tweaking needed before it can be deployed. The moviebot itself needs some work in terms of how it's using the embedded data in the response, for example, and some design issues still need to be addressed. I'm pleased with how the app is progressing so far, though. :D
+There are still a lot of refinements and tweaking needed before it can be deployed. The moviebot itself needs some work in terms of how it's using the embedded data in the response, for example, and some design issues still need to be addressed. I'm now researching fine tuning for LLMs with a view to implementing this in my app and creating a chatbot film expert. I'm overall very pleased with how the app is progressing so far. :D

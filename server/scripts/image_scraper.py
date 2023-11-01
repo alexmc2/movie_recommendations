@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+# script for scraping images from imdb website
 
 def get_imdb_image(movie_title, year):
     search_url = f"https://www.imdb.com/find?q={movie_title}+{year}"

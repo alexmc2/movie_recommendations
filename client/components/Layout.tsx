@@ -7,9 +7,9 @@ export const metadata = {
   description: 'Movie recommendation app built with Next.js and Python',
 };
 
-// layout.tsx
 
-import { RootLayoutProps } from '@/pages/types'; // Ensure you import the type
+
+import { RootLayoutProps } from '@/pages/types';
 
 export default function RootLayout({
   children,

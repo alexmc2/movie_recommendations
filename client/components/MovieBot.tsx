@@ -63,17 +63,17 @@ export default function MovieBot({
       }
 
       const data = await response.json();
-      setRecommendedMovies(data.recommended_movies);
+      setRecommendedMovies(data.recommendedMovies);
 
       setMessages((prevMessages) => [
         ...prevMessages,
         { role: 'bot', content: data.bot_msg },
       ]);
 
-      setExtractedMovieTitles(data.recommended_movies);
+      setExtractedMovieTitles(data.recommendedMovies);
       console.log(
         'Recommended IMDb IDs from backend:',
-        data.recommended_movies
+        data.recommendedMovies
       );
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
