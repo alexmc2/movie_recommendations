@@ -6,9 +6,9 @@ This repo is the ~~early~~ middle stages of a movie recommendation app that uses
 
 I was inspired to make this app while watching a Colt Steel Udemy tutorial on OpenAI text embeddings where a sample of film data was used for demonstration purposes. I thought it would be a fun and interesting challenge to expand on this idea with a much larger dataset and a frontend user interface. I used scripts to collect the data for the top 10,000 films on IMDB and embedded this into the vector database using OpenAI's text-embedding-ada-002 model. 
 
-The backend is built with Python (Flask), and ~~Vite~~ Next.js is used for the frontend. I've used Chroma vector database to store the embeddings due to it's easy integration with OpenAI.
+The backend is built with Python (Flask), and ~~Vite~~ Next.js is used for the frontend. I've also created an Amazon RDS SQL database to store the film data, and this is used to make image cards on the frontend for each film recommendations. 
 
-The app will be deployed using AWS. I've also uploaded the film data to Amazon RDS (an SQL database) and this data is used to make image cards on the frontend. 
+The app will also be deployed using AWS.  
 
 Here's an interesting 2D visualisation of the embeddings created by the text-embedding-ada-002 model. This graph represents the top 10,000 films on IMDB which have been clustered together based on relatedness between the films.
 
