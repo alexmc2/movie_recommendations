@@ -1,5 +1,5 @@
 import Theme from '../pages/theme-provider';
-import Header from '@/components/ui/header';
+// import Header from '@/components/ui/header';
 import MovieBot from '../components/MovieBot';
 
 export const metadata = {
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <Theme>
       <div className="flex flex-col min-h-screen overflow-hidden">
-        <Header />
+        {/* <Header /> */}
         <div className="grow flex flex-col lg:flex-row">
           <MovieBot
             title="MovieBot"

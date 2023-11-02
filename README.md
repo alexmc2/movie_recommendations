@@ -55,4 +55,4 @@ After a lot of trial and error (many, many errors), I've finally managed to get 
 
 There are still a lot of refinements and tweaking needed before it can be deployed. The moviebot itself needs some work in terms of how it's using the embedded data in the response, for example, and some design issues still need to be addressed. 
 
-I'm now researching and learning about fine tuning for LLMs with a view to implementing this in my app and creating a fine-tuned chatbot film expert. I'm overall pleased with how the app is progressing so far. :D 
+I'm now learning LangChain for LLMs with a view to implementing this in my app and creating a fine-tuned chatbot film expert. I'm overall pleased with how the app is progressing so far. :D 
